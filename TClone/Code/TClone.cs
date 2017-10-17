@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace TClone
 {
@@ -11,11 +12,14 @@ namespace TClone
     {
         public static readonly int WIDTH = 10;
         public static readonly int HEIGHT = 18;
+        public static readonly int TILESIZE = 16;
 
         public static TClone instance;
+        public static Texture2D pixel;
 
-        Block[,] blocks = new Block[WIDTH,HEIGHT];
-        Rectangle playArea = new Rectangle(0, 0, WIDTH, HEIGHT);
+        GameBoard gameBoard;
+
+        Rectangle playArea = new Rectangle(0, 0, WIDTH * TILESIZE, HEIGHT * TILESIZE);
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -26,25 +30,13 @@ namespace TClone
                 Exit();
             }
             instance = this;
+            gameBoard = new GameBoard();
 
-            for (int x = 0; x < WIDTH; x++) {
-                for (int y = 0; y < HEIGHT; y++) {
-                    //blocks[x, y] = new Block(new Point(x, y), Color.Yellow);
-                }
-            }
-
-            PlacePrefab(Block.prefab, new Point(5, 1));
+            gameBoard.PlacePrefab(Block.prefab, new Point(5, HEIGHT - 5));
+            gameBoard.PlacePrefab(Block.prefab, new Point(5, 1));
 
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-        }
-
-        public void PlacePrefab(Block.BlockPrefab prefab, Point origin) {
-            foreach(Block b in prefab.blocks) {
-                int offX = b.position.X + origin.X;
-                int offY = b.position.Y + origin.Y;
-                blocks[offX, offY] = new Block(new Point(offX, offY), b.color);
-            }
         }
 
         /// <summary>
@@ -69,16 +61,9 @@ namespace TClone
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            pixel = new Texture2D(GraphicsDevice, 1, 1);
+            pixel.SetData<Color>(new Color[] { Color.White });
             Block.texture = Content.Load<Texture2D>("block");
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -91,9 +76,7 @@ namespace TClone
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            foreach(Block b in blocks) {
-                b?.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            }
+            gameBoard.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -107,10 +90,8 @@ namespace TClone
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            
-            foreach(Block b in blocks) {
-                b?.Draw(spriteBatch);
-            }
+            spriteBatch.Draw(pixel, playArea, Color.Purple);
+            gameBoard.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,17 +11,37 @@ namespace TClone {
     public class Block {
         public static Texture2D texture;
 
-        public static BlockPrefab prefab = new BlockPrefab( new Block[] {
+        Rectangle drawDestination;
+
+        public static BlockPrefab prefab = new BlockPrefab(new Block[] {
             new Block(new Point(0,0), Color.Blue),
-            new Block(new Point(0,1), Color.Blue)
+            new Block(new Point(0,1), Color.Blue),
+            new Block(new Point(0,2), Color.Blue),
+            new Block(new Point(1,2), Color.Blue),
         });
 
-        public Point position;
+        Point position;
         public Color color;
 
         public Block(Point position, Color color) {
             this.position = position;
             this.color = color;
+
+            drawDestination = new Rectangle(position.X * TClone.TILESIZE, position.Y * TClone.TILESIZE, TClone.TILESIZE, TClone.TILESIZE);
+        }
+
+        public Point GetPosition() {
+            return position;
+        }
+
+        public void SetPosition(Point newPosition) {
+            //if(newPosition.X < 0 || newPosition.X >= TClone.WIDTH ||
+            //   newPosition.Y < 0 || newPosition.Y >= TClone.HEIGHT) {
+            //    return;
+            //}
+
+            position = newPosition;
+            drawDestination = new Rectangle(position.X * TClone.TILESIZE, position.Y * TClone.TILESIZE, TClone.TILESIZE, TClone.TILESIZE);
         }
 
         public void Update(float deltaTime) {
@@ -28,7 +49,7 @@ namespace TClone {
         }
 
         public void Draw(SpriteBatch sb) {
-            sb.Draw(texture, position.ToVector2() * 16, color);
+            sb.Draw(texture, drawDestination, color);
         }
 
         public struct BlockPrefab {
