@@ -32,8 +32,7 @@ namespace TClone
             instance = this;
             gameBoard = new GameBoard();
 
-            gameBoard.PlacePrefab(Block.prefab, new Point(5, HEIGHT - 5));
-            gameBoard.PlacePrefab(Block.prefab, new Point(5, 1));
+            gameBoard.PlacePrefab(Block.prefabBlock, new Point(5,0));
 
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -76,6 +75,7 @@ namespace TClone
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            KeystateHelper.Update();
             gameBoard.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);

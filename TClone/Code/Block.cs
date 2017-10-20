@@ -10,24 +10,38 @@ using System.Threading.Tasks;
 namespace TClone {
     public class Block {
         public static Texture2D texture;
+        public bool active = false;
 
         Rectangle drawDestination;
+        public static List<BlockPrefab> prefabs = new List<BlockPrefab>();
 
-        public static BlockPrefab prefab = new BlockPrefab(new Block[] {
+        public static BlockPrefab prefabL = new BlockPrefab(new Block[] {
             new Block(new Point(0,0), Color.Blue),
             new Block(new Point(0,1), Color.Blue),
             new Block(new Point(0,2), Color.Blue),
             new Block(new Point(1,2), Color.Blue),
         });
 
+        public static BlockPrefab prefabLine = new BlockPrefab(new Block[] {
+            new Block(new Point(0,0), Color.Blue),
+            new Block(new Point(0,1), Color.Blue),
+            new Block(new Point(0,2), Color.Blue),
+            new Block(new Point(0,3), Color.Blue),
+        });
+
+        public static BlockPrefab prefabBlock = new BlockPrefab(new Block[] {
+            new Block(new Point(0,0), Color.Blue),
+            new Block(new Point(0,1), Color.Blue),
+            new Block(new Point(1,0), Color.Blue),
+            new Block(new Point(1,1), Color.Blue),
+        });
+
         Point position;
         public Color color;
 
         public Block(Point position, Color color) {
-            this.position = position;
+            SetPosition(position);
             this.color = color;
-
-            drawDestination = new Rectangle(position.X * TClone.TILESIZE, position.Y * TClone.TILESIZE, TClone.TILESIZE, TClone.TILESIZE);
         }
 
         public Point GetPosition() {
@@ -35,10 +49,10 @@ namespace TClone {
         }
 
         public void SetPosition(Point newPosition) {
-            //if(newPosition.X < 0 || newPosition.X >= TClone.WIDTH ||
-            //   newPosition.Y < 0 || newPosition.Y >= TClone.HEIGHT) {
-            //    return;
-            //}
+            if (newPosition.X < 0 || newPosition.X >= TClone.WIDTH ||
+               newPosition.Y < 0 || newPosition.Y >= TClone.HEIGHT) {
+                return;
+            }
 
             position = newPosition;
             drawDestination = new Rectangle(position.X * TClone.TILESIZE, position.Y * TClone.TILESIZE, TClone.TILESIZE, TClone.TILESIZE);
@@ -60,6 +74,7 @@ namespace TClone {
                 foreach (Block b in blocks) {
                     this.blocks.Add(b);
                 }
+                prefabs.Add(this);
             }
         }
     }

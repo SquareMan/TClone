@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Code\Block.cs" />
     <Compile Include="Code\GameBoard.cs" />
+    <Compile Include="Code\KeystateHelper.cs" />
     <Compile Include="Code\TClone.cs" />
     <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
