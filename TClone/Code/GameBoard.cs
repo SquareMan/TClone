@@ -126,6 +126,59 @@ namespace TClone {
                 }
             }
             validMove = true;
+
+            if(KeystateHelper.IsKeyReleased(Keys.RightControl)) {
+                //Rotate clockwise
+
+                //Determine centerpoint
+                //Determine relative coordinates for each block
+                //new relative coordinates = (x,y) -> (y,-x)
+
+                //Determine centerpoint
+                Point lowest = new Point(-1,-1);
+                Point highest = new Point(-1,-1);
+                foreach(Block b in activeBlocks) {
+                    Point pos = b.GetPosition();
+
+                    if(lowest.Equals(new Point(-1,-1)) || lowest.Equals(new Point(-1,-1))) {
+                        lowest = pos;
+                        highest = pos;
+                        continue;
+                    }
+
+                    if(lowest.X > pos.X) {
+                        lowest.X = pos.X;
+                    }
+                    if(lowest.Y > pos.Y) {
+                        lowest.Y = pos.Y;
+                    }
+
+                    if(highest.X < pos.X) {
+                        highest.X = pos.X;
+                    }
+                    if(highest.Y < pos.Y) {
+                        highest.Y = pos.Y;
+                    }
+                }
+
+                Point center = lowest + (highest - lowest);
+                Debug.WriteLine(center);
+
+                foreach(Block b in activeBlocks) {
+                    Point pos = b.GetPosition();
+                    blocks[pos.X, pos.Y] = null;
+                }
+
+                foreach(Block b in activeBlocks) {
+                    Point currentPos = b.GetPosition();
+                    Point relativePos = currentPos - center;
+                    Point newPos = new Point(-relativePos.Y, relativePos.X) + center;
+
+                    blocks[newPos.X, newPos.Y] = b;
+                    b.SetPosition(newPos);
+                }
+            }
+
             if (KeystateHelper.state.IsKeyDown(Keys.Down))
                 timer += deltaTime * 5;
 

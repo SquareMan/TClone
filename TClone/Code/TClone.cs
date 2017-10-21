@@ -32,7 +32,7 @@ namespace TClone
             instance = this;
             gameBoard = new GameBoard();
 
-            gameBoard.PlacePrefab(Block.prefabBlock);
+            gameBoard.PlacePrefab(Block.prefabT);
 
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
