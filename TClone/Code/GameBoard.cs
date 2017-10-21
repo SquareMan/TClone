@@ -12,12 +12,16 @@ namespace TClone {
     class GameBoard {
         Block[,] blocks = new Block[TClone.WIDTH, TClone.HEIGHT];
         List<Block> activeBlocks = new List<Block>();
+        Point spawnPoint = new Point(TClone.WIDTH / 2 - 1, 0);
+        Block.BlockPrefab nextPrefab;
+        Random rand;
 
         float timePerDrop = .4f;
         float timer = 0;
 
         public GameBoard() {
-
+            rand = new Random();
+            nextPrefab = Block.prefabs[rand.Next(Block.prefabs.Count)];
         }
 
         public void ClearBoard() {
@@ -29,7 +33,7 @@ namespace TClone {
             }
         }
 
-        public void PlacePrefab(Block.BlockPrefab prefab, Point origin) {
+        public void PlacePrefab(Block.BlockPrefab prefab) {
             //Clear list of active blocks
             foreach(Block b in activeBlocks) {
                 b.active = false;
@@ -38,8 +42,8 @@ namespace TClone {
 
             //Check if area is empty
             foreach (Block b in prefab.blocks) {
-                int offX = b.GetPosition().X + origin.X;
-                int offY = b.GetPosition().Y + origin.Y;
+                int offX = b.GetPosition().X + spawnPoint.X;
+                int offY = b.GetPosition().Y + spawnPoint.Y;
 
                 if(blocks[offX,offY] != null) {
                     //TODO: Gameover
@@ -49,8 +53,8 @@ namespace TClone {
             }
 
             foreach (Block b in prefab.blocks) {
-                int offX = b.GetPosition().X + origin.X;
-                int offY = b.GetPosition().Y + origin.Y;
+                int offX = b.GetPosition().X + spawnPoint.X;
+                int offY = b.GetPosition().Y + spawnPoint.Y;
                 Block spawnedBlock = new Block(new Point(offX, offY), b.color);
                 blocks[offX, offY] = spawnedBlock;
 
@@ -184,7 +188,8 @@ namespace TClone {
                     }
                 }
 
-                PlacePrefab(Block.prefabBlock, new Point(5, 1));
+                PlacePrefab(nextPrefab);
+                nextPrefab = Block.prefabs[rand.Next(Block.prefabs.Count)];
             }
         }
 
@@ -194,16 +199,16 @@ namespace TClone {
                 b?.Draw(sb);
             }
 
-            for (int i = 0; i < TClone.WIDTH; i++) {
-                for (int j = 0; j < TClone.HEIGHT; j++) {
-                    if (blocks[i, j] == null) {
-                        continue;
-                    }
+            //for (int i = 0; i < TClone.WIDTH; i++) {
+            //    for (int j = 0; j < TClone.HEIGHT; j++) {
+            //        if (blocks[i, j] == null) {
+            //            continue;
+            //        }
 
-                    Rectangle dest = new Rectangle(i * TClone.TILESIZE, j * TClone.TILESIZE, 4, 4);
-                    sb.Draw(TClone.pixel, dest, Color.Yellow);
-                }
-            }
+            //        Rectangle dest = new Rectangle(i * TClone.TILESIZE, j * TClone.TILESIZE, 4, 4);
+            //        sb.Draw(TClone.pixel, dest, Color.Yellow);
+            //    }
+            //}
         }
     }
 }

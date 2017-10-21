@@ -15,25 +15,53 @@ namespace TClone {
         Rectangle drawDestination;
         public static List<BlockPrefab> prefabs = new List<BlockPrefab>();
 
-        public static BlockPrefab prefabL = new BlockPrefab(new Block[] {
-            new Block(new Point(0,0), Color.Blue),
-            new Block(new Point(0,1), Color.Blue),
-            new Block(new Point(0,2), Color.Blue),
-            new Block(new Point(1,2), Color.Blue),
+        public static readonly BlockPrefab prefabL = new BlockPrefab(new Block[] {
+            new Block(new Point(0,0), Color.Yellow),
+            new Block(new Point(0,1), Color.Yellow),
+            new Block(new Point(0,2), Color.Yellow),
+            new Block(new Point(1,2), Color.Yellow),
         });
 
-        public static BlockPrefab prefabLine = new BlockPrefab(new Block[] {
+        public static readonly BlockPrefab prefabLMirror = new BlockPrefab(new Block[] {
+            new Block(new Point(1,0), Color.Green),
+            new Block(new Point(1,1), Color.Green),
+            new Block(new Point(1,2), Color.Green),
+            new Block(new Point(0,2), Color.Green),
+        });
+
+        public static readonly BlockPrefab prefabT = new BlockPrefab(new Block[] {
+            new Block(new Point(0,0), Color.Red),
+            new Block(new Point(0,1), Color.Red),
+            new Block(new Point(1,1), Color.Red),
+            new Block(new Point(0,2), Color.Red),
+        });
+
+        public static readonly BlockPrefab prefabZ = new BlockPrefab(new Block[] {
+            new Block(new Point(0,0), Color.Brown),
+            new Block(new Point(1,0), Color.Brown),
+            new Block(new Point(1,1), Color.Brown),
+            new Block(new Point(2,1), Color.Brown),
+        });
+
+        public static readonly BlockPrefab prefabZMirror = new BlockPrefab(new Block[] {
+            new Block(new Point(0,1), Color.Orange),
+            new Block(new Point(1,1), Color.Orange),
+            new Block(new Point(1,0), Color.Orange),
+            new Block(new Point(2,0), Color.Orange),
+        });
+
+        public static readonly BlockPrefab prefabLine = new BlockPrefab(new Block[] {
             new Block(new Point(0,0), Color.Blue),
             new Block(new Point(0,1), Color.Blue),
             new Block(new Point(0,2), Color.Blue),
             new Block(new Point(0,3), Color.Blue),
         });
 
-        public static BlockPrefab prefabBlock = new BlockPrefab(new Block[] {
-            new Block(new Point(0,0), Color.Blue),
-            new Block(new Point(0,1), Color.Blue),
-            new Block(new Point(1,0), Color.Blue),
-            new Block(new Point(1,1), Color.Blue),
+        public static readonly BlockPrefab prefabBlock = new BlockPrefab(new Block[] {
+            new Block(new Point(0,0), Color.Violet),
+            new Block(new Point(0,1), Color.Violet),
+            new Block(new Point(1,0), Color.Violet),
+            new Block(new Point(1,1), Color.Violet),
         });
 
         Point position;
