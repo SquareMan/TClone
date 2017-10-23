@@ -14,7 +14,9 @@ namespace TClone {
         public int highScore = 0;
 
         Block[,] blocks = new Block[TClone.WIDTH, TClone.HEIGHT];
+        Block.BlockPrefab activePrefab;
         Block.BlockPrefab nextPrefab;
+        Block.BlockPrefab heldPrefab;
         Random rand;
 
         List<Block> activeBlocks = new List<Block>();
@@ -75,6 +77,7 @@ namespace TClone {
                 spawnedBlock.active = true;
             }
             activeOrigin = prefab.origin + spawnPoint;
+            activePrefab = prefab;
         }
 
         public Block GetBlock(int x, int y) {
@@ -86,11 +89,30 @@ namespace TClone {
             return blocks[x, y];
         }
 
+        void Hold() {
+            Block.BlockPrefab toPlace = heldPrefab;
+
+            heldPrefab = activePrefab;
+            foreach (Block b in activeBlocks) {
+                Point blockPos = b.GetPosition();
+                blocks[blockPos.X, blockPos.Y] = null;
+            }
+
+            if (toPlace.blocks == null)
+                PlacePrefab(nextPrefab);
+            else
+                PlacePrefab(toPlace);
+        }
+
         public void Update(float deltaTime) {
             //This can happen every frame
             //Check for user input left or right
             //Determine if move is legal (make sure every block can move)
             //If move is legal, perform it
+
+            if(KeystateHelper.IsKeyReleased(Keys.LeftShift) || KeystateHelper.IsKeyReleased(Keys.RightShift)) {
+                Hold();
+            }
 
             bool validMove = true;
             if (KeystateHelper.IsKeyReleased(Keys.Left)) {
@@ -142,7 +164,7 @@ namespace TClone {
             }
             validMove = true;
 
-            if(KeystateHelper.IsKeyReleased(Keys.RightControl)) {
+            if(KeystateHelper.IsKeyReleased(Keys.LeftControl) || KeystateHelper.IsKeyReleased(Keys.RightControl)) {
                 //Rotate clockwise
 
                 //Determine centerpoint
@@ -176,15 +198,6 @@ namespace TClone {
                         blocks[newPositions[i].X, newPositions[i].Y] = b;
                         b.SetPosition(newPositions[i]);
                     }
-
-                    //foreach (Block b in activeBlocks) {
-                    //    Point currentPos = b.GetPosition();
-                    //    Point relativePos = currentPos - activeOrigin;
-                    //    Point newPos = new Point(-relativePos.Y, relativePos.X) + activeOrigin;
-
-                    //    blocks[newPos.X, newPos.Y] = b;
-                    //    b.SetPosition(newPos);
-                    //}
                 }
             }
 
@@ -268,6 +281,16 @@ namespace TClone {
         public void Draw(SpriteBatch sb) {
             foreach (Block b in blocks) {
                 b?.Draw(sb);
+            }
+
+            foreach (Block b in nextPrefab.blocks) {
+                b.Draw(sb, new Point(TClone.WIDTH + 2, 2));
+            }
+
+            if (heldPrefab.blocks != null) {
+                foreach (Block b in heldPrefab.blocks) {
+                    b.Draw(sb, new Point(TClone.WIDTH + 2, 9));
+                }
             }
 
             sb.DrawString(TClone.font, "Score: " + score, Vector2.One, Color.Black);

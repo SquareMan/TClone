@@ -86,12 +86,14 @@ namespace TClone {
             drawDestination = new Rectangle(position.X * TClone.TILESIZE, position.Y * TClone.TILESIZE, TClone.TILESIZE, TClone.TILESIZE);
         }
 
-        public void Update(float deltaTime) {
-
-        }
-
         public void Draw(SpriteBatch sb) {
             sb.Draw(texture, drawDestination, color);
+        }
+
+        public void Draw(SpriteBatch sb, Point offset) {
+            Rectangle offsetDestination = drawDestination;
+            offsetDestination.Location += new Point(offset.X * TClone.TILESIZE, offset.Y * TClone.TILESIZE);
+            sb.Draw(texture, offsetDestination, color);
         }
 
         public struct BlockPrefab {

@@ -18,14 +18,15 @@ namespace TClone
         public static Texture2D pixel;
         public static SpriteFont font;
 
+        public static Rectangle playArea = new Rectangle(0, 0, WIDTH * TILESIZE, HEIGHT * TILESIZE);
+        public static Rectangle nextArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE, TILESIZE * 6, TILESIZE * 6);
+        public static Rectangle holdArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE * 8, TILESIZE * 6, TILESIZE * 6);
+        
         GameBoard gameBoard;
-
-        Rectangle playArea = new Rectangle(0, 0, WIDTH * TILESIZE, HEIGHT * TILESIZE);
-        Rectangle nextArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE, TILESIZE * 6, TILESIZE * 6);
-        Rectangle holdArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE * 8, TILESIZE * 6, TILESIZE * 6);
-
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        bool paused = false;
         
         public TClone()
         {
@@ -75,11 +76,11 @@ namespace TClone
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if (KeystateHelper.IsKeyReleased(Keys.Escape))
+                paused = !paused;
 
             KeystateHelper.Update();
-            gameBoard.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            if(!paused) gameBoard.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -100,6 +101,9 @@ namespace TClone
 
             spriteBatch.DrawString(font, "Hold: ", new Vector2(WIDTH * TILESIZE + TILESIZE, TILESIZE * 7 + 4), Color.Black);
             spriteBatch.Draw(pixel, holdArea, Color.Purple);
+
+            if (paused)
+                spriteBatch.DrawString(font, "PAUSED", new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), Color.Black);
 
             gameBoard.Draw(spriteBatch);
             spriteBatch.End();
