@@ -12,14 +12,17 @@ namespace TClone
     {
         public static readonly int WIDTH = 10;
         public static readonly int HEIGHT = 18;
-        public static readonly int TILESIZE = 16;
+        public static readonly int TILESIZE = 24;
 
         public static TClone instance;
         public static Texture2D pixel;
+        public static SpriteFont font;
 
         GameBoard gameBoard;
 
         Rectangle playArea = new Rectangle(0, 0, WIDTH * TILESIZE, HEIGHT * TILESIZE);
+        Rectangle nextArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE, TILESIZE * 6, TILESIZE * 6);
+        Rectangle holdArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE * 8, TILESIZE * 6, TILESIZE * 6);
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -31,8 +34,6 @@ namespace TClone
             }
             instance = this;
             gameBoard = new GameBoard();
-
-            gameBoard.PlacePrefab(Block.prefabT);
 
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -63,6 +64,8 @@ namespace TClone
             pixel = new Texture2D(GraphicsDevice, 1, 1);
             pixel.SetData<Color>(new Color[] { Color.White });
             Block.texture = Content.Load<Texture2D>("block");
+
+            font = Content.Load<SpriteFont>("font");
         }
 
         /// <summary>
@@ -91,6 +94,13 @@ namespace TClone
 
             spriteBatch.Begin();
             spriteBatch.Draw(pixel, playArea, Color.Purple);
+
+            spriteBatch.DrawString(font, "Next: ", new Vector2(WIDTH * TILESIZE + TILESIZE, 4), Color.Black);
+            spriteBatch.Draw(pixel, nextArea, Color.Purple);
+
+            spriteBatch.DrawString(font, "Hold: ", new Vector2(WIDTH * TILESIZE + TILESIZE, TILESIZE * 7 + 4), Color.Black);
+            spriteBatch.Draw(pixel, holdArea, Color.Purple);
+
             gameBoard.Draw(spriteBatch);
             spriteBatch.End();
 

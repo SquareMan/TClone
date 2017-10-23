@@ -10,12 +10,16 @@ using System.Threading.Tasks;
 
 namespace TClone {
     class GameBoard {
+        public int score = 0;
+        public int highScore = 0;
+
         Block[,] blocks = new Block[TClone.WIDTH, TClone.HEIGHT];
+        Block.BlockPrefab nextPrefab;
+        Random rand;
+
         List<Block> activeBlocks = new List<Block>();
         Point activeOrigin;
         Point spawnPoint = new Point(TClone.WIDTH / 2 - 1, 0);
-        Block.BlockPrefab nextPrefab;
-        Random rand;
 
         float timePerDrop = .4f;
         float timer = 0;
@@ -23,6 +27,8 @@ namespace TClone {
         public GameBoard() {
             rand = new Random();
             nextPrefab = Block.prefabs[rand.Next(Block.prefabs.Count)];
+
+            PlacePrefab(nextPrefab);
         }
 
         public void ClearBoard() {
@@ -48,6 +54,11 @@ namespace TClone {
 
                 if(blocks[offX,offY] != null) {
                     //TODO: Gameover
+                    if(score > highScore) {
+                        highScore = score;
+                    }
+                    score = 0;
+
                     ClearBoard();
                     break;
                 }
@@ -214,6 +225,7 @@ namespace TClone {
                 activeOrigin.Y += 1;
             } else {
                 //Check for and clear complete lines
+                int multiplier = 0;
                 for (int y = 0; y < TClone.HEIGHT; y++) {
                     bool completeLine = true;
                     for (int x = 0; x < TClone.WIDTH; x++) {
@@ -222,6 +234,12 @@ namespace TClone {
                     }
 
                     if (completeLine) {
+
+                        if (multiplier == 0)
+                            multiplier = 1;
+                        else
+                            multiplier *= 2;
+
                         for (int x = 0; x < TClone.WIDTH; x++) {
                             blocks[x, y] = null;
                         }
@@ -240,6 +258,7 @@ namespace TClone {
                         }
                     }
                 }
+                score += multiplier * 100;
 
                 PlacePrefab(nextPrefab);
                 nextPrefab = Block.prefabs[rand.Next(Block.prefabs.Count)];
@@ -247,21 +266,12 @@ namespace TClone {
         }
 
         public void Draw(SpriteBatch sb) {
-
             foreach (Block b in blocks) {
                 b?.Draw(sb);
             }
 
-            //for (int i = 0; i < TClone.WIDTH; i++) {
-            //    for (int j = 0; j < TClone.HEIGHT; j++) {
-            //        if (blocks[i, j] == null) {
-            //            continue;
-            //        }
-
-            //        Rectangle dest = new Rectangle(i * TClone.TILESIZE, j * TClone.TILESIZE, 4, 4);
-            //        sb.Draw(TClone.pixel, dest, Color.Yellow);
-            //    }
-            //}
+            sb.DrawString(TClone.font, "Score: " + score, Vector2.One, Color.Black);
+            sb.DrawString(TClone.font, "High Score: " + highScore, new Vector2(1,TClone.font.LineSpacing), Color.Black);
         }
     }
 }
