@@ -20,49 +20,49 @@ namespace TClone {
             new Block(new Point(0,1), Color.Yellow),
             new Block(new Point(0,2), Color.Yellow),
             new Block(new Point(1,2), Color.Yellow),
-        });
+        },  new Point(0,1));
 
         public static readonly BlockPrefab prefabLMirror = new BlockPrefab(new Block[] {
             new Block(new Point(1,0), Color.Green),
             new Block(new Point(1,1), Color.Green),
             new Block(new Point(1,2), Color.Green),
             new Block(new Point(0,2), Color.Green),
-        });
+        }, new Point(1,1));
 
         public static readonly BlockPrefab prefabT = new BlockPrefab(new Block[] {
             new Block(new Point(0,0), Color.Red),
             new Block(new Point(0,1), Color.Red),
             new Block(new Point(1,1), Color.Red),
             new Block(new Point(0,2), Color.Red),
-        });
+        },  new Point(0,1));
 
         public static readonly BlockPrefab prefabZ = new BlockPrefab(new Block[] {
             new Block(new Point(0,0), Color.Brown),
             new Block(new Point(1,0), Color.Brown),
             new Block(new Point(1,1), Color.Brown),
             new Block(new Point(2,1), Color.Brown),
-        });
+        },  new Point(1,0));
 
         public static readonly BlockPrefab prefabZMirror = new BlockPrefab(new Block[] {
             new Block(new Point(0,1), Color.Orange),
             new Block(new Point(1,1), Color.Orange),
             new Block(new Point(1,0), Color.Orange),
             new Block(new Point(2,0), Color.Orange),
-        });
+        },  new Point(1,1));
 
         public static readonly BlockPrefab prefabLine = new BlockPrefab(new Block[] {
             new Block(new Point(0,0), Color.Blue),
             new Block(new Point(0,1), Color.Blue),
             new Block(new Point(0,2), Color.Blue),
             new Block(new Point(0,3), Color.Blue),
-        });
+        },  new Point(0,1));
 
         public static readonly BlockPrefab prefabBlock = new BlockPrefab(new Block[] {
             new Block(new Point(0,0), Color.Violet),
             new Block(new Point(0,1), Color.Violet),
             new Block(new Point(1,0), Color.Violet),
             new Block(new Point(1,1), Color.Violet),
-        });
+        },  new Point(1,1));
 
         Point position;
         public Color color;
@@ -96,12 +96,15 @@ namespace TClone {
 
         public struct BlockPrefab {
             public List<Block> blocks;
+            public Point origin;
 
-            public BlockPrefab(Block[] blocks) {
+            public BlockPrefab(Block[] blocks, Point origin) {
                 this.blocks =  new List<Block>();
                 foreach (Block b in blocks) {
                     this.blocks.Add(b);
                 }
+                this.origin = origin;
+
                 prefabs.Add(this);
             }
         }

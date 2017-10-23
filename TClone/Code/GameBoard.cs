@@ -12,6 +12,7 @@ namespace TClone {
     class GameBoard {
         Block[,] blocks = new Block[TClone.WIDTH, TClone.HEIGHT];
         List<Block> activeBlocks = new List<Block>();
+        Point activeOrigin;
         Point spawnPoint = new Point(TClone.WIDTH / 2 - 1, 0);
         Block.BlockPrefab nextPrefab;
         Random rand;
@@ -62,6 +63,7 @@ namespace TClone {
                 activeBlocks.Add(spawnedBlock);
                 spawnedBlock.active = true;
             }
+            activeOrigin = prefab.origin + spawnPoint;
         }
 
         public Block GetBlock(int x, int y) {
@@ -101,6 +103,7 @@ namespace TClone {
                         b.SetPosition(new Point(blockPos.X - 1, blockPos.Y));
                         blocks[blockPos.X - 1, blockPos.Y] = b;
                     }
+                    activeOrigin.X -= 1;
                 }
             } else if (KeystateHelper.IsKeyReleased(Keys.Right)) {
                 //Move Right
@@ -123,6 +126,7 @@ namespace TClone {
                         b.SetPosition(new Point(blockPos.X + 1, blockPos.Y));
                         blocks[blockPos.X + 1, blockPos.Y] = b;
                     }
+                    activeOrigin.X += 1;
                 }
             }
             validMove = true;
@@ -134,48 +138,42 @@ namespace TClone {
                 //Determine relative coordinates for each block
                 //new relative coordinates = (x,y) -> (y,-x)
 
-                //Determine centerpoint
-                Point lowest = new Point(-1,-1);
-                Point highest = new Point(-1,-1);
-                foreach(Block b in activeBlocks) {
-                    Point pos = b.GetPosition();
+                //Check if rotation is possible
+                bool validRotation = true;
+                Point[] newPositions = new Point[activeBlocks.Count];
+                for (int i = 0; i < newPositions.Length; i++) {
+                    Point pos = activeBlocks[i].GetPosition() - activeOrigin;
+                    Point newPos = new Point(-pos.Y, pos.X) + activeOrigin;
+                    newPositions[i] = newPos;
 
-                    if(lowest.Equals(new Point(-1,-1)) || highest.Equals(new Point(-1,-1))) {
-                        lowest = pos;
-                        highest = pos;
-                        continue;
-                    }
-
-                    if(lowest.X > pos.X) {
-                        lowest.X = pos.X;
-                    }
-                    if(lowest.Y > pos.Y) {
-                        lowest.Y = pos.Y;
-                    }
-
-                    if(highest.X < pos.X) {
-                        highest.X = pos.X;
-                    }
-                    if(highest.Y < pos.Y) {
-                        highest.Y = pos.Y;
+                    Block testBlock = GetBlock(newPos.X, newPos.Y);
+                    if ((newPos.X < 0 || newPos.X >= TClone.WIDTH || newPos.Y < 0 || newPos.Y >= TClone.HEIGHT) || 
+                        testBlock != null && !testBlock.active) {
+                        validRotation = false;
                     }
                 }
 
-                Point center = lowest + (highest - lowest);
-                Debug.WriteLine(center);
+                if (validRotation) {
+                    //Remove the blocks from their current positon
+                    foreach (Block b in activeBlocks) {
+                        Point pos = b.GetPosition();
+                        blocks[pos.X, pos.Y] = null;
+                    }
 
-                foreach(Block b in activeBlocks) {
-                    Point pos = b.GetPosition();
-                    blocks[pos.X, pos.Y] = null;
-                }
+                    for (int i = 0; i < newPositions.Length; i++) {
+                        Block b = activeBlocks[i];
+                        blocks[newPositions[i].X, newPositions[i].Y] = b;
+                        b.SetPosition(newPositions[i]);
+                    }
 
-                foreach(Block b in activeBlocks) {
-                    Point currentPos = b.GetPosition();
-                    Point relativePos = currentPos - center;
-                    Point newPos = new Point(-relativePos.Y, relativePos.X) + center;
+                    //foreach (Block b in activeBlocks) {
+                    //    Point currentPos = b.GetPosition();
+                    //    Point relativePos = currentPos - activeOrigin;
+                    //    Point newPos = new Point(-relativePos.Y, relativePos.X) + activeOrigin;
 
-                    blocks[newPos.X, newPos.Y] = b;
-                    b.SetPosition(newPos);
+                    //    blocks[newPos.X, newPos.Y] = b;
+                    //    b.SetPosition(newPos);
+                    //}
                 }
             }
 
@@ -213,6 +211,7 @@ namespace TClone {
                     b.SetPosition(new Point(blockPos.X, blockPos.Y + 1));
                     blocks[blockPos.X, blockPos.Y + 1] = b;
                 }
+                activeOrigin.Y += 1;
             } else {
                 //Check for and clear complete lines
                 for (int y = 0; y < TClone.HEIGHT; y++) {
