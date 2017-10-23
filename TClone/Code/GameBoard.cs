@@ -140,7 +140,7 @@ namespace TClone {
                 foreach(Block b in activeBlocks) {
                     Point pos = b.GetPosition();
 
-                    if(lowest.Equals(new Point(-1,-1)) || lowest.Equals(new Point(-1,-1))) {
+                    if(lowest.Equals(new Point(-1,-1)) || highest.Equals(new Point(-1,-1))) {
                         lowest = pos;
                         highest = pos;
                         continue;
@@ -179,6 +179,7 @@ namespace TClone {
                 }
             }
 
+            //Accelerate the timer to drop the block faster
             if (KeystateHelper.state.IsKeyDown(Keys.Down))
                 timer += deltaTime * 5;
 

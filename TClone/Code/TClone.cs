@@ -8,7 +8,7 @@ namespace TClone
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class TClone : Game
+    class TClone : Game
     {
         public static readonly int WIDTH = 10;
         public static readonly int HEIGHT = 18;

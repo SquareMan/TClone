@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TClone {
-    public class Block {
+    class Block {
         public static Texture2D texture;
         public bool active = false;
 
