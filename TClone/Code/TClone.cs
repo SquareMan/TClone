@@ -19,8 +19,8 @@ namespace TClone
         public static SpriteFont font;
 
         public static Rectangle playArea = new Rectangle(0, 0, WIDTH * TILESIZE, HEIGHT * TILESIZE);
-        public static Rectangle nextArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE, TILESIZE * 6, TILESIZE * 6);
-        public static Rectangle holdArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE * 8, TILESIZE * 6, TILESIZE * 6);
+        public static Rectangle nextArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE, TILESIZE * 5, TILESIZE * 6);
+        public static Rectangle holdArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE * 8, TILESIZE * 5, TILESIZE * 6);
         
         GameBoard gameBoard;
         GraphicsDeviceManager graphics;
@@ -37,6 +37,9 @@ namespace TClone
             gameBoard = new GameBoard();
 
             graphics = new GraphicsDeviceManager(this);
+
+            graphics.PreferredBackBufferWidth = 384;
+            graphics.PreferredBackBufferHeight = 432;
             Content.RootDirectory = "Content";
         }
 
