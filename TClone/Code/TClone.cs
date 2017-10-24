@@ -26,6 +26,7 @@ namespace TClone
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        bool startup = true;
         bool paused = false;
         
         public TClone()
@@ -34,7 +35,6 @@ namespace TClone
                 Exit();
             }
             instance = this;
-            gameBoard = new GameBoard();
 
             graphics = new GraphicsDeviceManager(this);
 
@@ -79,11 +79,16 @@ namespace TClone
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (KeystateHelper.IsKeyReleased(Keys.Escape))
+            if(startup && KeystateHelper.IsKeyReleased(Keys.Enter)) {
+                startup = false;
+
+                gameBoard = new GameBoard();
+            }
+            if (!startup && KeystateHelper.IsKeyReleased(Keys.Escape))
                 paused = !paused;
 
             KeystateHelper.Update();
-            if(!paused) gameBoard.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            if(!paused) gameBoard?.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -97,6 +102,7 @@ namespace TClone
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+
             spriteBatch.Draw(pixel, playArea, Color.Purple);
 
             spriteBatch.DrawString(font, "Next: ", new Vector2(WIDTH * TILESIZE + TILESIZE, 4), Color.Black);
@@ -108,7 +114,17 @@ namespace TClone
             if (paused)
                 spriteBatch.DrawString(font, "PAUSED", new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), Color.Black);
 
-            gameBoard.Draw(spriteBatch);
+            gameBoard?.Draw(spriteBatch);
+
+            if (startup) {
+                spriteBatch.DrawString(font, "Welcome to TClone", Vector2.Zero, Color.Black);
+                spriteBatch.DrawString(font, "Controls: ", new Vector2(0, font.LineSpacing), Color.Black);
+                spriteBatch.DrawString(font, "Arrows: Move Tile", new Vector2(0, font.LineSpacing * 2), Color.Black);
+                spriteBatch.DrawString(font, "Control: Rotate Tile", new Vector2(0, font.LineSpacing * 3), Color.Black);
+                spriteBatch.DrawString(font, "Shift: Hold Tile", new Vector2(0, font.LineSpacing * 4), Color.Black);
+                spriteBatch.DrawString(font, "Pause/Unpause Game: Escape", new Vector2(0, font.LineSpacing * 5), Color.Black);
+                spriteBatch.DrawString(font, "Start Game: Enter", new Vector2(0, font.LineSpacing * 6), Color.Black);
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);
