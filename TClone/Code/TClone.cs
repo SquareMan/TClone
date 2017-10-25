@@ -18,13 +18,15 @@ namespace TClone
         public static Texture2D pixel;
         public static SpriteFont font;
 
+        public static Animation animTest;
+
         public static Rectangle playArea = new Rectangle(0, 0, WIDTH * TILESIZE, HEIGHT * TILESIZE);
         public static Rectangle nextArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE, TILESIZE * 5, TILESIZE * 6);
         public static Rectangle holdArea = new Rectangle(WIDTH * TILESIZE + TILESIZE, TILESIZE * 8, TILESIZE * 5, TILESIZE * 6);
         
         GameBoard gameBoard;
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public SpriteBatch spriteBatch;
 
         bool startup = true;
         bool paused = false;
@@ -41,6 +43,8 @@ namespace TClone
             graphics.PreferredBackBufferWidth = 384;
             graphics.PreferredBackBufferHeight = 432;
             Content.RootDirectory = "Content";
+
+            animTest = new Animation(this);
         }
 
         /// <summary>

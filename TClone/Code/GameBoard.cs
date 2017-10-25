@@ -271,7 +271,12 @@ namespace TClone {
                         }
                     }
                 }
-                score += multiplier * 100;
+
+                if (multiplier > 0) {
+                    score += multiplier * 100;
+
+                    TClone.animTest.Play();
+                }
 
                 PlacePrefab(nextPrefab);
                 nextPrefab = Block.prefabs[rand.Next(Block.prefabs.Count)];

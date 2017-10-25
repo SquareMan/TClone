@@ -57,6 +57,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Code\Animation.cs" />
     <Compile Include="Code\Block.cs" />
     <Compile Include="Code\GameBoard.cs" />
     <Compile Include="Code\KeystateHelper.cs" />
