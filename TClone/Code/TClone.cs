@@ -83,12 +83,12 @@ namespace TClone
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if(startup && KeystateHelper.IsKeyReleased(Keys.Enter)) {
+            if(startup && (KeystateHelper.IsKeyReleased(Keys.Enter) || KeystateHelper.IsButtonPressed(Buttons.Start))) {
                 startup = false;
 
                 gameBoard = new GameBoard();
             }
-            if (!startup && KeystateHelper.IsKeyReleased(Keys.Escape))
+            if (!startup && (KeystateHelper.IsKeyReleased(Keys.Escape) || KeystateHelper.IsButtonPressed(Buttons.Start)))
                 paused = !paused;
 
             KeystateHelper.Update();

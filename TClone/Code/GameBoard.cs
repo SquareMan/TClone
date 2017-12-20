@@ -110,12 +110,12 @@ namespace TClone {
             //Determine if move is legal (make sure every block can move)
             //If move is legal, perform it
 
-            if(KeystateHelper.IsKeyReleased(Keys.LeftShift) || KeystateHelper.IsKeyReleased(Keys.RightShift)) {
+            if(KeystateHelper.IsKeyReleased(Keys.LeftShift) || KeystateHelper.IsKeyReleased(Keys.RightShift) || KeystateHelper.IsButtonPressed(Buttons.X)) {
                 Hold();
             }
 
             bool validMove = true;
-            if (KeystateHelper.IsKeyReleased(Keys.Left)) {
+            if (KeystateHelper.IsKeyReleased(Keys.Left) || KeystateHelper.IsButtonPressed(Buttons.DPadLeft)) {
                 //Move Left
                 foreach (Block b in activeBlocks) {
                     Point blockPos = b.GetPosition();
@@ -138,7 +138,7 @@ namespace TClone {
                     }
                     activeOrigin.X -= 1;
                 }
-            } else if (KeystateHelper.IsKeyReleased(Keys.Right)) {
+            } else if (KeystateHelper.IsKeyReleased(Keys.Right) || KeystateHelper.IsButtonPressed(Buttons.DPadRight)) {
                 //Move Right
                 foreach (Block b in activeBlocks) {
                     Point blockPos = b.GetPosition();
@@ -164,7 +164,7 @@ namespace TClone {
             }
             validMove = true;
 
-            if(KeystateHelper.IsKeyReleased(Keys.LeftControl) || KeystateHelper.IsKeyReleased(Keys.RightControl)) {
+            if(KeystateHelper.IsKeyReleased(Keys.LeftControl) || KeystateHelper.IsKeyReleased(Keys.RightControl) || KeystateHelper.IsButtonPressed(Buttons.A)) {
                 //Rotate clockwise
 
                 //Determine centerpoint
@@ -202,7 +202,7 @@ namespace TClone {
             }
 
             //Accelerate the timer to drop the block faster
-            if (KeystateHelper.state.IsKeyDown(Keys.Down))
+            if (KeystateHelper.state.IsKeyDown(Keys.Down) || KeystateHelper.buttonState.IsButtonDown(Buttons.DPadDown))
                 timer += deltaTime * 5;
 
             timer += deltaTime;
