@@ -22,6 +22,11 @@ namespace TClone {
             buttonState = GamePad.GetState(PlayerIndex.One);
         }
 
+        public static bool IsKeyPressed(Keys key)
+        {
+            return state.IsKeyDown(key) && previous.IsKeyUp(key);
+        }
+
         public static bool IsKeyReleased(Keys key) {
             return state.IsKeyUp(key) && previous.IsKeyDown(key);
         }
