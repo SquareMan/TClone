@@ -116,7 +116,7 @@ namespace TClone
             spriteBatch.Draw(pixel, holdArea, Color.Purple);
 
             if (paused)
-                spriteBatch.DrawString(font, "PAUSED", new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), Color.Black);
+                spriteBatch.DrawString(font, "PAUSED", new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2) - (font.MeasureString("PAUSED") / 2), Color.Black);
 
             gameBoard?.Draw(spriteBatch);
 
